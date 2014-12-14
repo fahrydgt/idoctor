@@ -3,7 +3,7 @@ package com.iDoct.i_doctor;
 public class medicine {
  
 	    String name;
-	    //Fahry Lafir
+	    //Fahry Lafirdgt
 	    String capacity;
 	
 	    public String getName() {
