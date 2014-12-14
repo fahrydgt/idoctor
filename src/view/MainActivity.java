@@ -61,8 +61,8 @@ import android.widget.TabHost.TabSpec;
 public class MainActivity extends Activity {
 	
 	private List<medicine> mlist;
-	// objecs for exterrnal classes
-    webservices websv=new webservices();
+	// <objects for exterrnal classes>
+    webservices websv=new webservices();// get drugList from MySQL
 	controller c=new controller();
 	 
 	protected static final int RESULT_SPEECH = 1;
@@ -82,7 +82,7 @@ public class MainActivity extends Activity {
     private static int i1=0,h=0;
     private Spinner spin2;
     private TextView txtView;
-    private Button bt;
+    private Button doneBotton ;
     private String arr[]=null;
     private int count=0;
     private    static String lastdl="";
@@ -106,7 +106,7 @@ public class MainActivity extends Activity {
         tabHost.addTab(spec1);
 		tabHost.addTab(spec2);
 		
-		bt = (Button) findViewById(R.id.done);
+		doneBotton= (Button) findViewById(R.id.done);
 		bt1 = (Button) findViewById(R.id.button6);
 		
         print = (Button) findViewById(R.id.button2);
@@ -119,7 +119,7 @@ public class MainActivity extends Activity {
 		txtView = (TextView) findViewById(R.id.txtText);
 		btnSpeak = (ImageButton) findViewById(R.id.button1);
 	    	
-	    //Get Druglist Datas. 
+	    //Getting Druglist Data. 
 	    mlist=websv.getData();
 	       if(mlist.size()==0)
 	        {
@@ -131,15 +131,16 @@ public class MainActivity extends Activity {
 	        	Toast t = Toast.makeText(getApplicationContext(),"i-Doctor is Ready to use..",Toast.LENGTH_SHORT);
                 t.show();	
 	        }
-	        btnSpeak.setOnClickListener(new View.OnClickListener() {
 	       
+	     //Speech Recogniser buttonClick  
+	     btnSpeak.setOnClickListener(new View.OnClickListener() {
 	        @Override
 	        public void onClick(View v) {
 	        	Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
 	            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
 	            try { 
 	            	startActivityForResult(intent, RESULT_SPEECH);
-	                //txtText.setText("");
+	                
 	                } catch (ActivityNotFoundException a) {
 	                    Toast t = Toast.makeText(getApplicationContext(), "Opps! Your device doesn't support Speech to Text",Toast.LENGTH_SHORT);
 	                    t.show();
@@ -147,10 +148,9 @@ public class MainActivity extends Activity {
 	            }
 	        });
 	        
-	    
-	        bt.setOnClickListener(new View.OnClickListener() {
-	        	 
-	            @Override
+	     	//add a drug to prescription text view from recognised drug list spinner
+	        doneBotton.setOnClickListener(new View.OnClickListener() {
+	        	 @Override
 	            public void onClick(View v) {
 	            	
 	            if(spin.getSelectedItem()!=null)
@@ -170,7 +170,44 @@ public class MainActivity extends Activity {
 	            }
 	        });
 	        
-	        //desease tab
+	        //Delete last recognised drug
+		       delt.setOnClickListener(new View.OnClickListener() {
+		        	 
+		            @Override
+		            public void onClick(View v) {
+		            	
+		            if(i1==0){
+
+		            	Toast t = Toast.makeText(getApplicationContext(),
+	                            "Prescription is EMPTY!!",
+	                            Toast.LENGTH_SHORT);
+	                    t.show();
+		            }
+		            else{
+		            	
+		            	String lst=lastdl.substring(0, lastdl.lastIndexOf("\n"));
+		            	
+		            	lastdl=lst;
+		            	txtView.setText(lastdl);
+		            	i1--;
+		            }
+		            }
+		        });
+		       
+	        
+		       //write prescription to database
+			       print.setOnClickListener(new View.OnClickListener() {
+			        	 
+			            @Override
+			            public void onClick(View v) {
+			             
+			            	 AlertDialog diaBox = AskOption();
+			        		 diaBox.show();
+			        	        
+			                       }
+			        });
+	        
+	        //Decease tab Speech recogniser
 	        btnSpeak1.setOnClickListener(new View.OnClickListener() {
 	        	 
 	            @Override
@@ -183,7 +220,6 @@ public class MainActivity extends Activity {
 	 
 	                try {
 	                    startActivityForResult(intent1, RESULT_SPEECH);
-	                    //txtText.setText("");
 	                } catch (ActivityNotFoundException a) {
 	                    Toast t = Toast.makeText(getApplicationContext(),
 	                            "Opps! Your device doesn't support Speech to Text",
@@ -194,7 +230,8 @@ public class MainActivity extends Activity {
 	                }
 	            }
 	        });
-	        //delelte last recognized in disease
+	        
+	        //Delete last recognised  disease from text view
 		       btnSpeak2.setOnClickListener(new View.OnClickListener() {
 		        	 
 		            @Override
@@ -218,7 +255,8 @@ public class MainActivity extends Activity {
 		            	
 		            }
 		        });
-	    //write desesease to db
+		       
+	    //write deceases to db
 		      bt1.setOnClickListener(new View.OnClickListener() {
 		        	 
 		            @Override
@@ -243,42 +281,6 @@ public class MainActivity extends Activity {
 			        }
 		        });
 	    
-	    
-	       //write prescription to database
-		       print.setOnClickListener(new View.OnClickListener() {
-		        	 
-		            @Override
-		            public void onClick(View v) {
-		             
-		            	 AlertDialog diaBox = AskOption();
-		        		 diaBox.show();
-		        	        
-		                       }
-		        });
-	   
-	        //delelte last recognized
-	       delt.setOnClickListener(new View.OnClickListener() {
-	        	 
-	            @Override
-	            public void onClick(View v) {
-	            	
-	            if(i1==0){
-
-	            	Toast t = Toast.makeText(getApplicationContext(),
-                            "Prescription is EMPTY!!",
-                            Toast.LENGTH_SHORT);
-                    t.show();
-	            }
-	            else{
-	            	
-	            	String lst=lastdl.substring(0, lastdl.lastIndexOf("\n"));
-	            	
-	            	lastdl=lst;
-	            	txtView.setText(lastdl);
-	            	i1--;
-	            }
-	            }
-	        });
 	       
 	       exit.setOnClickListener(new View.OnClickListener() {
 	        	 
@@ -308,8 +310,6 @@ public class MainActivity extends Activity {
 	             	break;
 	        			}
 	        		}
-				
-					
 				}
 
 				@Override
@@ -320,34 +320,31 @@ public class MainActivity extends Activity {
 	        });
 	}
 	
-	//method for add prescription#
-public void addpres()
-{
+	
+//method for add prescription#
+public void addpres(){
 	 String wrt=(String) txtView.getText();
-	  if(i1==0)
-      {
+	  if(i1==0) {
       	Toast t = Toast.makeText(getApplicationContext(),
                      "Prescreption field is EMPTY!!",
                      Toast.LENGTH_SHORT);
              t.show();
       	
       }
-      else
-      {
+      else {
 	 
     	  websv.AddPrescreptionToDb(wrt);
 
       }
 }
 	
-public void pop()
-{
+//calling Dialog Box for exit 
+public void pop(){
 	CustomDialogClass cdd=new CustomDialogClass(this);
 	cdd.show();  	
 }
-public void setAdep(List<String> list2)
 
-{
+public void setAdep(List<String> list2){
 	 dataAdapter2 = new ArrayAdapter<String>(this,
       		android.R.layout.simple_spinner_item, list2);
       	dataAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -365,22 +362,21 @@ public void setAdep(List<String> list2)
 	
 	
 	
-	 
+	 //Setting up the spinners with data afeter speech 
 	 @Override
-	    protected void onActivityResult(int requestCode, int resultCode, Intent data) {super.onActivityResult(requestCode, resultCode, data);
+	    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		 
+		 super.onActivityResult(requestCode, resultCode, data);
 	 
 	        switch (requestCode) {
 	        case RESULT_SPEECH: {
 	            if (resultCode == RESULT_OK && null != data) {
 	 
 	                ArrayList<String> text = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-	                
-	                //String gtxt=text.get(0);
-	               
 	               
 	                spin = (Spinner) findViewById(R.id.spinner1);
+	               
 	                //class to do the processing parts
-	                
 	                List<String> list=c.GetList(text,mlist);
 	            	
 	            	ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, list);
@@ -399,7 +395,7 @@ public void setAdep(List<String> list2)
 	             	spin1.setAdapter(dataAdapter1);
 	            	
 	            	
-	            	 //mg
+	            	 //Drug Capacity 
 	            	 spin2 = (Spinner) findViewById(R.id.spinner3);
 	            	 
 	        		for(medicine drg:mlist)

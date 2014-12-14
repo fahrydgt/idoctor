@@ -30,7 +30,7 @@ public class webservices {
 
 	 ArrayList<medicine> medicines = new ArrayList<medicine>();
 	
-	//get from db
+	//get drugs lists from db returtn arrayList
 	public ArrayList<medicine> getData(){
 		        String db_url = "http://fahrydgt.webuda.com/aa/hh.php";
 		        InputStream is = null;
@@ -87,10 +87,9 @@ public class webservices {
 		    }
 	
 	
-
+//adding the created prescription to DB 
 public void AddPrescreptionToDb(String wrt)
 {
-	 
     HttpClient httpclient = new DefaultHttpClient();
     HttpPost httppost = new HttpPost("http://fahrydgt.webuda.com/aa/add.php");  
 
@@ -123,9 +122,9 @@ public void AddPrescreptionToDb(String wrt)
     }
 }
 
+//Adding created  deceases to DB
 public void addDeseaceToDb(String wrt2)
 {
-
 	 HttpClient httpclient = new DefaultHttpClient();
      HttpPost httppost = new HttpPost("hhttp://fahrydgt.webuda.com/aa/addDeseace.php");  
 
