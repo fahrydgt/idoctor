@@ -1,4 +1,4 @@
-package com.iDoct.i_doctor;
+package view;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -27,6 +27,10 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.iDoct.i_doctor.R;
+
+import controller.controller;
 
 
 
@@ -57,10 +61,11 @@ import android.widget.TabHost.TabSpec;
 public class MainActivity extends Activity {
 	
 	private List<medicine> mlist;
-	
-
-	 webservices websv=new webservices();
-    protected static final int RESULT_SPEECH = 1;
+	// objecs for exterrnal classes
+    webservices websv=new webservices();
+	controller c=new controller();
+	 
+	protected static final int RESULT_SPEECH = 1;
  
     private ImageButton btnSpeak;
     private ImageButton btnSpeak1;
@@ -87,7 +92,6 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		
 		TabHost tabHost=(TabHost)findViewById(R.id.tabHost);
 		tabHost.setup();
 
@@ -99,73 +103,46 @@ public class MainActivity extends Activity {
 		spec2.setIndicator("Decease");
 		spec2.setContent(R.id.Dicease);
 
-
-		tabHost.addTab(spec1);
+        tabHost.addTab(spec1);
 		tabHost.addTab(spec2);
 		
 		bt = (Button) findViewById(R.id.done);
-		
 		bt1 = (Button) findViewById(R.id.button6);
 		
-
-		print = (Button) findViewById(R.id.button2);
+        print = (Button) findViewById(R.id.button2);
 		exit = (Button) findViewById(R.id.button3);
-
-		 txtView1 = (TextView) findViewById(R.id.textView1);
-		
-
+        txtView1 = (TextView) findViewById(R.id.textView1);
 		btnSpeak1= (ImageButton) findViewById(R.id.button4);
-
-		btnSpeak2= (ImageButton) findViewById(R.id.button5);
-		
-		 spin = (Spinner) findViewById(R.id.spinner1);
-		 
+        btnSpeak2= (ImageButton) findViewById(R.id.button5);
+		spin = (Spinner) findViewById(R.id.spinner1);
 		delt= (ImageButton) findViewById(R.id.del);
-		 
-		 txtView = (TextView) findViewById(R.id.txtText);
-		 
-	        btnSpeak = (ImageButton) findViewById(R.id.button1);
+		txtView = (TextView) findViewById(R.id.txtText);
+		btnSpeak = (ImageButton) findViewById(R.id.button1);
 	    	
-	       
-	        //Get Druglist Datas. 
-	        mlist=websv.getData();
-	       
-	        if(mlist.size()==0)
+	    //Get Druglist Datas. 
+	    mlist=websv.getData();
+	       if(mlist.size()==0)
 	        {
-	        	Toast t = Toast.makeText(getApplicationContext(),
-                        "Opps! Your device not connected with DATABASE",
-                        Toast.LENGTH_SHORT);
+	        	Toast t = Toast.makeText(getApplicationContext(),"Opps! Your device not connected with DATABASE",Toast.LENGTH_SHORT);
                 t.show();
 	        }
 	        else
 	        {
-	        	Toast t = Toast.makeText(getApplicationContext(),
-                        "i-Doctor is Ready to use..",
-                        Toast.LENGTH_SHORT);
-                t.show();
-	        	
+	        	Toast t = Toast.makeText(getApplicationContext(),"i-Doctor is Ready to use..",Toast.LENGTH_SHORT);
+                t.show();	
 	        }
 	        btnSpeak.setOnClickListener(new View.OnClickListener() {
-	        	
-	        
-	        	 
-	            @Override
-	            public void onClick(View v) {
-	 
-	                Intent intent = new Intent(
-	                        RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-	 
-	                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
-	 
-	                try {
-	                    startActivityForResult(intent, RESULT_SPEECH);
-	                    //txtText.setText("");
+	       
+	        @Override
+	        public void onClick(View v) {
+	        	Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+	            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+	            try { 
+	            	startActivityForResult(intent, RESULT_SPEECH);
+	                //txtText.setText("");
 	                } catch (ActivityNotFoundException a) {
-	                    Toast t = Toast.makeText(getApplicationContext(),
-	                            "Opps! Your device doesn't support Speech to Text",
-	                            Toast.LENGTH_SHORT);
+	                    Toast t = Toast.makeText(getApplicationContext(), "Opps! Your device doesn't support Speech to Text",Toast.LENGTH_SHORT);
 	                    t.show();
-	            
 	                }
 	            }
 	        });
@@ -324,18 +301,9 @@ public class MainActivity extends Activity {
 	        		{
 	        			if(String.valueOf(spin.getSelectedItem()).equals(drg.getName()))
 	        			{
-	        				String[] ar1=null;
-	        				ar1=drg.getCapacity().split(",");
-	        				
-	        		 List<String> list2 = new ArrayList<String>();
-	        		 for(int k=0;k<ar1.length;k++)
-	        		 {
-	             	list2.add(ar1[k]);
-	        		 }
-	        	
-	             	
-	             	setAdep(list2);
-	             	spin2.setAdapter(dataAdapter2);
+	        				List<String> list2=c.setCapacity(drg);
+	        	            setAdep(list2);
+	             	        spin2.setAdapter(dataAdapter2);
 	             	
 	             	break;
 	        			}
@@ -399,44 +367,34 @@ public void setAdep(List<String> list2)
 	
 	 
 	 @Override
-	    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	        super.onActivityResult(requestCode, resultCode, data);
+	    protected void onActivityResult(int requestCode, int resultCode, Intent data) {super.onActivityResult(requestCode, resultCode, data);
 	 
 	        switch (requestCode) {
 	        case RESULT_SPEECH: {
 	            if (resultCode == RESULT_OK && null != data) {
 	 
-	                ArrayList<String> text = data
-	                        .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+	                ArrayList<String> text = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 	                
 	                //String gtxt=text.get(0);
-	               AlgorithmDrugMatcher adm=new AlgorithmDrugMatcher();
 	               
-	                
+	               
 	                spin = (Spinner) findViewById(R.id.spinner1);
-	            	List<String> list = new ArrayList<String>();
-	            	list.add(adm.list(text.get(0),mlist)[0]);
-	            	list.add(adm.list(text.get(0),mlist)[1]);
-	            	list.add(adm.list(text.get(0),mlist)[2]);
-	            	list.add(adm.list(text.get(0),mlist)[3]);
-	            	list.add(adm.list(text.get(0),mlist)[4]);
+	                //class to do the processing parts
+	                
+	                List<String> list=c.GetList(text,mlist);
 	            	
-	            	ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-	            		android.R.layout.simple_spinner_item, list);
+	            	ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, list);
 	            	dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	            	spin.setAdapter(dataAdapter);
 	                
 	            	
-	       //after meal,b4 meal
+	                 //after meal,b4 meal
 	            	 spin1 = (Spinner) findViewById(R.id.spinner2);
-	        		 
-	        		 List<String> list1 = new ArrayList<String>();
-	             	list1.add("BD");
-	             	list1.add("TDS");
-	             	list1.add("One/Day");
+	            	// get list from controller class
+	        		 List<String> list1 = c.getList1(); 
+	             	 
 	             	
-	             	ArrayAdapter<String> dataAdapter1 = new ArrayAdapter<String>(this,
-	             		android.R.layout.simple_spinner_item, list1);
+	             	ArrayAdapter<String> dataAdapter1 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, list1);
 	             	dataAdapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	             	spin1.setAdapter(dataAdapter1);
 	            	
@@ -448,21 +406,12 @@ public void setAdep(List<String> list2)
 	        		{
 	        			if(String.valueOf(spin.getSelectedItem()).equals(drg.getName()))
 	        			{
-	        				String[] ar1=null;
-	        				ar1=drg.getCapacity().split(",");
-	        				
-	        		 List<String> list2 = new ArrayList<String>();
-	        		 for(int k=0;k<ar1.length;k++)
-	        		 {
-	             	list2.add(ar1[k]);
-	        		 }
-	        		
-	             dataAdapter2 = new ArrayAdapter<String>(this,
-	             		android.R.layout.simple_spinner_item, list2);
-	             	dataAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-	             	spin2.setAdapter(dataAdapter2);
+	        				List<String> list2=c.setCapacity(drg);
+	        			    dataAdapter2 = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, list2);
+	             	       dataAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	             	       spin2.setAdapter(dataAdapter2);
 	             	
-	             	break;
+	             	       break;
 	        			}
 	        		}
 	            	//txtView.setText(String.valueOf(spin.getSelectedItem()));

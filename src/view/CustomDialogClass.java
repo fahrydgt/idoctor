@@ -1,4 +1,6 @@
-package com.iDoct.i_doctor;
+package view;
+
+import com.iDoct.i_doctor.R;
 
 import android.app.Activity;
 import android.app.Dialog;

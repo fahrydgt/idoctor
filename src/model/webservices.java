@@ -32,7 +32,7 @@ public class webservices {
 	
 	//get from db
 	public ArrayList<medicine> getData(){
-		        String db_url = "http://192.168.43.224/aa/hh.php";
+		        String db_url = "http://fahrydgt.webuda.com/aa/hh.php";
 		        InputStream is = null;
 		        String line = null;
 		        ArrayList<NameValuePair> request = new ArrayList<NameValuePair>();
@@ -92,7 +92,7 @@ public void AddPrescreptionToDb(String wrt)
 {
 	 
     HttpClient httpclient = new DefaultHttpClient();
-    HttpPost httppost = new HttpPost("http://192.168.43.224/aa/add.php");  
+    HttpPost httppost = new HttpPost("http://fahrydgt.webuda.com/aa/add.php");  
 
     try {
         // Adding data
@@ -127,7 +127,7 @@ public void addDeseaceToDb(String wrt2)
 {
 
 	 HttpClient httpclient = new DefaultHttpClient();
-     HttpPost httppost = new HttpPost("http://192.168.43.224/aa/addDeseace.php");  
+     HttpPost httppost = new HttpPost("hhttp://fahrydgt.webuda.com/aa/addDeseace.php");  
 
  
      try {

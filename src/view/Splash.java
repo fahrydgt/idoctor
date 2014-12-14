@@ -1,4 +1,4 @@
-package com.iDoct.i_doctor;
+package view;
 
 
  
@@ -22,6 +22,8 @@ import org.apache.http.protocol.HttpContext;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.iDoct.i_doctor.R;
 
 
 import android.app.Activity;

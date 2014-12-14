@@ -2,8 +2,8 @@ package model;
 
 public class medicine {
  
-	    String name;
-	    String capacity;
+	    private String name;
+	    private String capacity;
 	
 	    public String getName() {
 	        return name;

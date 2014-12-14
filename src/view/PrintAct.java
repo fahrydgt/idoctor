@@ -1,4 +1,4 @@
-package com.iDoct.i_doctor;
+package view;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;

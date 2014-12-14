@@ -1,7 +1,9 @@
-package model;
+package controller;
 
 import java.util.Arrays;
 import java.util.List;
+
+import model.medicine;
 
 public class AlgorithmDrugMatcher {
 
