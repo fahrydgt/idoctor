@@ -1,4 +1,4 @@
-package com.iDoct.i_doctor;
+package model;
 
 public class medicine {
  
