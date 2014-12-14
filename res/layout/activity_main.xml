@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/tabHost"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scrollbarStyle="insideOverlay"
+        android:scrollbars="none|vertical" >
+
+    <TabWidget
+        android:id="@android:id/tabs"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:splitMotionEvents="false" />
+
+     <FrameLayout
+         android:id="@android:id/tabcontent"
+         android:layout_width="fill_parent"
+         android:layout_height="fill_parent"
+         android:background="@drawable/aas" >
+
+         <LinearLayout
+             android:id="@+id/Prescription"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical"
+             android:paddingTop="80px" >
+
+             <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content" >
+
+                 <Spinner
+                     android:id="@+id/spinner1"
+                     android:layout_width="140dp"
+                     android:layout_height="46dp"
+                     android:layout_weight="1" />
+
+                 <ImageButton
+                     android:id="@+id/button1"
+                     android:layout_width="80dp"
+                     android:layout_height="46dp"
+                     android:layout_weight="0.58"
+                     android:contentDescription="@string/speak"
+                     android:src="@android:drawable/ic_btn_speak_now" />
+
+                 <Button
+                     android:id="@+id/done"
+                     android:layout_width="80dp"
+                     android:layout_height="46dp"
+                     android:layout_weight="0.24"
+                     android:text="Done" />
+             </LinearLayout>
+
+             <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content" >
+
+                 <TextView
+                     android:id="@+id/txtText"
+                     android:layout_width="204dp"
+                     android:layout_height="247dp"
+                     android:layout_marginLeft="10dp"
+                     android:layout_marginRight="5dp"
+                     android:layout_marginTop="10dp"
+                     android:textAppearance="?android:attr/textAppearanceLarge"
+                     android:textSize="@dimen/pp" />
+
+                 <LinearLayout
+                     android:layout_width="wrap_content"
+                     android:layout_height="match_parent"
+                     android:layout_weight="0.63"
+                     android:orientation="vertical" >
+
+                     <Spinner
+                         android:id="@+id/spinner2"
+                         android:layout_width="match_parent"
+                         android:layout_height="41dp"
+                         android:layout_marginTop="40dp" />
+
+                     <Spinner
+                         android:id="@+id/spinner3"
+                         android:layout_width="match_parent"
+                         android:layout_height="41dp"
+                         android:layout_marginTop="40dp" />
+
+                     <ImageButton
+                         android:id="@+id/del"
+                         android:layout_width="match_parent"
+                         android:layout_height="wrap_content"
+                         android:layout_marginTop="50dp"
+                         android:contentDescription="@string/speak"
+                         android:src="@android:drawable/ic_menu_delete" />
+                 </LinearLayout>
+             </LinearLayout>
+
+             <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_weight="0.42"
+                 android:paddingTop="5dp" >
+
+                 <Button
+                     android:id="@+id/button2"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_weight="0.38"
+                     android:text="Print" />
+
+                 <Button
+                     android:id="@+id/button3"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     android:layout_weight="0.41"
+                     android:text="Exit" />
+             </LinearLayout>
+         </LinearLayout>
+
+         <LinearLayout
+             android:id="@+id/Dicease"
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent"
+             android:orientation="vertical"
+             android:paddingTop="70dp" >
+
+             <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_weight="0.65" >
+
+                 <TextView
+                     android:id="@+id/textView1"
+                     android:layout_width="wrap_content"
+                     android:layout_height="280dp"
+                     android:layout_margin="10dp"
+                     android:layout_marginTop="10dp"
+                     android:layout_weight="1.17"
+                     />
+
+                 <LinearLayout
+                     android:layout_width="wrap_content"
+                     android:layout_height="match_parent"
+                     android:layout_weight="0.00"
+                     android:orientation="vertical" >
+
+                     <ImageButton
+                         android:id="@+id/button4"
+                         android:layout_width="80dp"
+                         android:layout_height="70dp"
+                         android:layout_marginLeft="4dp"
+                         android:layout_marginTop="30dp"
+                         android:src="@android:drawable/ic_btn_speak_now" />
+
+                     <Button
+                         android:id="@+id/button6"
+                         android:layout_width="80dp"
+                         android:layout_height="70dp"
+                         android:layout_marginLeft="4dp"
+                         android:layout_marginTop="20dp"
+                         android:text="Done" />
+
+                     <ImageButton
+                         android:id="@+id/button5"
+                         android:layout_width="80dp"
+                         android:layout_height="70dp"
+                         android:layout_marginLeft="4dp"
+                         android:layout_marginTop="25sp"
+                         android:src="@android:drawable/ic_menu_delete" />
+                 </LinearLayout>
+             </LinearLayout>
+         </LinearLayout>
+         
+     </FrameLayout>
+    
+    </TabHost>
