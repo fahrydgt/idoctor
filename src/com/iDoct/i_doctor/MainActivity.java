@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import model.medicine;
+import model.*;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -56,8 +56,10 @@ import android.widget.TabHost.TabSpec;
 
 public class MainActivity extends Activity {
 	
-	private static List<medicine> mlist;
-	 
+	private List<medicine> mlist;
+	
+
+	 webservices websv=new webservices();
     protected static final int RESULT_SPEECH = 1;
  
     private ImageButton btnSpeak;
@@ -124,7 +126,9 @@ public class MainActivity extends Activity {
 		 
 	        btnSpeak = (ImageButton) findViewById(R.id.button1);
 	    	
-	        mlist=getData();
+	       
+	        //Get Druglist Datas. 
+	        mlist=websv.getData();
 	       
 	        if(mlist.size()==0)
 	        {
@@ -256,37 +260,7 @@ public class MainActivity extends Activity {
 			        }
 			        else
 			        {
-		            HttpClient httpclient = new DefaultHttpClient();
-			        HttpPost httppost = new HttpPost("http://192.168.43.224/aa/addDeseace.php");  
-			 
-			    
-			        try {
-			            // Add your data
-			            List nameValuePairs = new ArrayList(1);
-			            nameValuePairs.add(new BasicNameValuePair("data2", wrt2));
-			            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));  
-			 
-			            // Execute HTTP Post Request
-			            HttpResponse response = httpclient.execute(httppost);
-			 
-			            InputStream is = response.getEntity().getContent();
-			            BufferedInputStream bis = new BufferedInputStream(is);
-			            ByteArrayBuffer baf = new ByteArrayBuffer(20);
-			 
-			            int current = 0;
-			             
-			            while((current = bis.read()) != -1){
-			                baf.append((byte)current);
-			            }  
-			 
-			            /* Convert the Bytes read to a String. */
-			      
-			     
-			        } catch (ClientProtocolException e) {
-			            // TODO Auto-generated catch block
-			        } catch (IOException e) {
-			            // TODO Auto-generated catch block
-			        }
+			        	websv.addDeseaceToDb(wrt2);
 		            	
 		            }
 			        }
@@ -377,8 +351,8 @@ public class MainActivity extends Activity {
 				}
 	        });
 	}
-	//method for add prescreption#
 	
+	//method for add prescription#
 public void addpres()
 {
 	 String wrt=(String) txtView.getText();
@@ -393,38 +367,7 @@ public void addpres()
       else
       {
 	 
-	 
-     HttpClient httpclient = new DefaultHttpClient();
-     HttpPost httppost = new HttpPost("http://192.168.43.224/aa/add.php");  
-
-     try {
-         // Add your data
-         List nameValuePairs = new ArrayList(1);
-         nameValuePairs.add(new BasicNameValuePair("data1", wrt));
-         httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));  
-
-         // Execute HTTP Post Request
-         HttpResponse response = httpclient.execute(httppost);
-
-         InputStream is = response.getEntity().getContent();
-         BufferedInputStream bis = new BufferedInputStream(is);
-         ByteArrayBuffer baf = new ByteArrayBuffer(20);
-
-         int current = 0;
-          
-         while((current = bis.read()) != -1){
-             baf.append((byte)current);
-         }  
-
-         /* Convert the Bytes read to a String. */
-   
-  
-     } catch (ClientProtocolException e) {
-         // TODO Auto-generated catch block
-     } catch (IOException e) {
-         // TODO Auto-generated catch block
-     }
-     	
+    	  websv.AddPrescreptionToDb(wrt);
 
       }
 }
@@ -450,150 +393,10 @@ public void setAdep(List<String> list2)
 	}
 
 	
-	 public static String [] list(String gt)
-	    {
-		 
 	
-		 String[] arrDrugList=new String[mlist.size()];
-		 for(int j=0;j<mlist.size();j++)
-		 {
-			 arrDrugList[j]=mlist.get(j).getName();
-			 
-		 }
-
-	    	
-	    	String arr[]=new String[5];//creating returning array
-	    	int count[]=new int[arrDrugList.length];//for count probability
-	    	int count1[]=new int[arrDrugList.length];//for sort probaility
-	        
-	    	char cgt1;//get char value for google apn word 
-	    	char clt1;//get char value for Array value
-	    	for(int i=0;i<gt.length();i++)//recognized text gt
-	    	{
-	    		 cgt1=gt.charAt(i);
-	    		 
-	    		for(int m=0;m<arrDrugList.length;m++)//number of drugs in array
-	    		{
-	    			
-	    			if(arrDrugList[m].length()>i)//Check length of a drug to avoid null exception 
-	                        {
-	                            clt1=arrDrugList[m].charAt(i);
-	    				
-	    				if(Character.toLowerCase(cgt1)==Character.toLowerCase(clt1))
-	    				{
-	    					 if(i==0)//firstLetter Priority
-                             {
-                                   
-                                     count[m]=count[m]+2;
-                                       count1[m]=count1[m]+2;
-                              }
-                          if(i==1)//Second Letter Priority
-                             {
-                                   
-                                     count[m]=count[m]+1;
-                                       count1[m]=count1[m]+1;
-                              }
-                        
-	                                   
-	                                
-	                          
-	    					count[m]++;
-	                                        count1[m]++;
-	    
-	                                }	
-	   System.out.println(arrDrugList[m]+"--"+count[m]);
-	                        }
-	    			
-	    			
-	    			
-	    		}
-	    		
-	    		
-	    	}
-	// sorting array
-	        Arrays.sort(count1);
-	       
-	     
-	   int a=0;
-	   int b=arrDrugList.length-1;
-	   while(a!=5)
-	   {
-	   for(int i=arrDrugList.length-1;i>=0;i--)
-	   {
-	   if(count1[b]==count[i])
-	   {
-	    arr[a]=arrDrugList[i];
-	    		   a++;
-	                   if(a==5) {
-	           break;
-	       }
-	                   
-	                   b--;
-	   }
-	   }
-	   }
-	   
-	       return arr;
-	    }
-	 
-	 
-	 
-//get from db
-	 public ArrayList<medicine> getData(){
-	        String db_url = "http://192.168.43.224/aa/hh.php";
-	        InputStream is = null;
-	        String line = null;
-	        ArrayList<NameValuePair> request = new ArrayList<NameValuePair>();
-	        request.add(new BasicNameValuePair("bssid","bssid"));
-	        Object returnValue[] = new Object[2];
-	        try
-	        {
-	            HttpClient httpclient = new DefaultHttpClient();
-	            HttpContext localContext = new BasicHttpContext();
-	            HttpPost httppost = new HttpPost(db_url);
-	            httppost.setEntity(new UrlEncodedFormEntity(request));
-	            HttpResponse response = httpclient.execute(httppost, localContext);
-	            HttpEntity entity = response.getEntity();
-	            is = entity.getContent();
-	        }catch(Exception e){
-	            Log.e("log_tag", "Error in http connection" +e.toString());
-	        }
-	        String result = "";
-	        try
-	        {
-	            BufferedReader reader = new BufferedReader(new InputStreamReader(is,"iso-8859-1"),8);
-	            StringBuilder sb = new StringBuilder();
-
-	            while ((line = reader.readLine()) != null) {
-	                sb.append(line + "\n");
-	            }
-	            is.close();
-	            result=sb.toString();
-	        }catch(Exception e){
-	            Log.e("log_tag", "Error in http connection" +e.toString());
-	        }
-	        ArrayList<medicine> medicines = new ArrayList<medicine>();
-	        try
-	        {
-	            JSONArray jArray = new JSONArray(result);
-	            
-	            for (int i = 0; i < jArray.length(); i++) {
-	            	medicine m=new medicine();
-	            JSONObject json_data = jArray.getJSONObject(i);
-	            returnValue[0] = (json_data.getString("MedicineName"));
-	            returnValue[1] = (json_data.getString("Quantity"));
-	            m.setName(json_data.getString("MedicineName"));
-	            m.setCapacity(json_data.getString("Quantity"));
-	            medicines.add(m);
-	            
-	            }
-	            
-	        }catch(JSONException e){
-	            Log.e("log_tag", "Error parsing data" +e.toString());
-	        }
-	        return medicines;
-	    }
-
+	
+	
+	
 	 
 	 @Override
 	    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -607,14 +410,16 @@ public void setAdep(List<String> list2)
 	                        .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 	                
 	                //String gtxt=text.get(0);
+	               AlgorithmDrugMatcher adm=new AlgorithmDrugMatcher();
+	               
 	                
 	                spin = (Spinner) findViewById(R.id.spinner1);
 	            	List<String> list = new ArrayList<String>();
-	            	list.add(list(text.get(0))[0]);
-	            	list.add(list(text.get(0))[1]);
-	            	list.add(list(text.get(0))[2]);
-	            	list.add(list(text.get(0))[3]);
-	            	list.add(list(text.get(0))[4]);
+	            	list.add(adm.list(text.get(0),mlist)[0]);
+	            	list.add(adm.list(text.get(0),mlist)[1]);
+	            	list.add(adm.list(text.get(0),mlist)[2]);
+	            	list.add(adm.list(text.get(0),mlist)[3]);
+	            	list.add(adm.list(text.get(0),mlist)[4]);
 	            	
 	            	ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
 	            		android.R.layout.simple_spinner_item, list);
